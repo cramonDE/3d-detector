@@ -1,37 +1,13 @@
-const { createServer } = require('vite')
+// 0.导入需要的资源包
+const Koa = require('koa');
+const app = new Koa();
+const serve = require('koa-static');
+const path = require('path')
 
-const myPlugin = ({
-  root, // project root directory, absolute path
-  app, // Koa app instance
-  server, // raw http server instance
-  watcher // chokidar file watcher instance
-}) => {
-  app.use(async (ctx, next) => {
-    // You can do pre-processing here - this will be the raw incoming requests
-    // before vite touches it.
-    if (ctx.path.endsWith('.scss')) {
-      // Note vue <style lang="xxx"> are supported by
-      // default as long as the corresponding pre-processor is installed, so this
-      // only applies to <link ref="stylesheet" href="*.scss"> or js imports like
-      // `import '*.scss'`.
-      console.log('pre processing: ', ctx.url)
-      ctx.type = 'css'
-      ctx.body = 'body { border: 1px solid red }'
-    }
+// 1.主页静态网页 把静态页统一放到public中管理
+const home   = serve(path.join(__dirname)+'/dist/');
+// 2.hello接口
 
-    // ...wait for vite to do built-in transforms
-    await next()
-
-    // Post processing before the content is served. Note this includes parts
-    // compiled from `*.vue` files, where <template> and <script> are served as
-    // `application/javascript` and <style> are served as `text/css`.
-    if (ctx.response.is('js')) {
-      console.log('post processing: ', ctx.url)
-      // console.log(ctx.body) // can be string or Readable stream
-    }
-  })
-}
-
-createServer({
-  configureServer: [myPlugin]
-}).listen(3000)
+// 3.分配路由
+app.use(home); 
+app.listen(3000);

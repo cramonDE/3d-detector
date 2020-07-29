@@ -7,6 +7,7 @@
 			<div class="main-bg"></div>
 			<div class="btn-left" id="btnLeft"></div>
 			<div class="btn-right" id="btnRight"></div>
+			<div class="swipe" id="swipe"></div>
 			<button class="confirm" id="btnConfirm" style="visibility: hidden;"></button>
 		</div>
   </div>
@@ -160,9 +161,9 @@ export default {
         let X = this.moveEndX - this.startX;
         let Y = this.moveEndY - this.startY;
         if (X > 100) {
-          btnRight.click()
-        } else if (X < -100) {
           btnLeft.click()
+        } else if (X < -100) {
+          btnRight.click()
         }
       });
       const init = () => {

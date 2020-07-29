@@ -217,20 +217,20 @@ export default {
           z: 0,
           scale: 1.2,
         });
-        setTimeout(() => {
-          loadBasisTex(initModel, 2, {
-            x: -0.3,
-            y: -0.8,
-            z: 0,
-            scale: 1.5
-          })
-          loadBasisTex(initModel, 3, {
-            x: 3.2,
-            y: -0.8,
-            z: 0,
-            scale: 1.5
-          })
-        }, 100)
+        // setTimeout(() => {
+        //   loadBasisTex(initModel, 2, {
+        //     x: -0.3,
+        //     y: -0.8,
+        //     z: 0,
+        //     scale: 1.5
+        //   })
+        //   loadBasisTex(initModel, 3, {
+        //     x: 3.2,
+        //     y: -0.8,
+        //     z: 0,
+        //     scale: 1.5
+        //   })
+        // }, 100)
 
         //添加旋转控制器
         // controls = new OrbitControls( camera, renderer.domElement )

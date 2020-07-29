@@ -1,19 +1,14 @@
 <template>
   <div>
     <div class="start-bg" id="startBg">
-      <button class="start" id="btnStart"></button>
-    </div>
-    <div class="main">
-      <div class="btn-left" id="btnLeft"></div>
-      <div class="btn-right" id="btnRight"></div>
-      <div class="swipe" id="swipe"></div>
-
-      <button
-        class="confirm"
-        id="btnConfirm"
-        style="visibility: hidden;"
-      ></button>
-    </div>
+			<button class="start" id="btnStart"></button>
+		</div>
+		<div class="main">
+			<div class="main-bg"></div>
+			<div class="btn-left" id="btnLeft"></div>
+			<div class="btn-right" id="btnRight"></div>
+			<button class="confirm" id="btnConfirm" style="visibility: hidden;"></button>
+		</div>
   </div>
 </template>
 
@@ -36,7 +31,7 @@ export default {
       let wrapper = [];
       let wrapperX = [-3.5, -0, 3.5];
       let rotate = 0;
-      let curIndex = 1;
+      let curIndex = 0;
       let clickAni = false;
       let startX, startY, moveEndX, moveEndY;
       const btnLeft = document.querySelector('#btnLeft');
@@ -45,74 +40,86 @@ export default {
       const btnConfirm = document.querySelector('#btnConfirm');
       const swipe = document.querySelector('#swipe');
       const cameraToleft = () => {
-        if (clickAni) {
-          return;
+        if(clickAni) {
+          return
         }
-        clickAni = true;
-        let x = 0;
-        switch (curIndex) {
+        clickAni = true
+        let x = 0
+        renderer.render( scene, camera)
+        switch(curIndex) {
           case 0:
-            x = -3.5;
-            break;
+            x = -3.5
+            break
           case 1:
-            x = -3.5;
-            break;
+            x = -3.5
+            break
           case 2:
-            x = 0;
-            break;
-          default:
-            break;
+            x = 0
+            break
+          default: 
+            break
         }
-        TweenMax.to(camera.position, 0.35, {
-          x: x,
-          ease: Power0.easeNone,
-          onComplete: function () {
-            if (curIndex > 0) {
-              curIndex--;
+        if(curIndex > 0){
+          curIndex --
+        }
+        camera.layers.enable( curIndex + 1 );
+        TweenMax.to(
+          camera.position,
+          0.35,
+          {
+            x: x,
+            ease:Power0.easeNone,
+            onComplete: function(){
+              clickAni = false
+              // self.enter_ani = false;
+              // self.object.rotation.y = 0;
+              // this.playani = false;
             }
-            clickAni = false;
-            // self.enter_ani = false;
-            // self.object.rotation.y = 0;
-            // this.playani = false;
-          },
-        });
-      };
+          }
+        );
+      }
 
       const cameraToright = () => {
-        if (clickAni) {
-          return;
+        if(clickAni) {
+          return
         }
-        clickAni = true;
-        let x = 0;
-        switch (curIndex) {
+        renderer.render( scene, camera)
+        clickAni = true
+        let x = 0
+        switch(curIndex) {
           case 0:
-            x = 0;
-            break;
+            x = 0
+            break
           case 1:
-            x = 3.5;
-            break;
+            x = 3.5
+            break
           case 2:
-            x = 3.5;
-            break;
-          default:
-            break;
+            x = 3.5
+            break
+          default: 
+            break
         }
-        TweenMax.to(camera.position, 0.35, {
-          x: x,
-          ease: Power0.easeNone,
-          onComplete: function () {
-            // self.enter_ani = false;
-            // self.object.rotation.y = 0;
-            // this.playani = false;
-            clickAni = false;
-            if (curIndex < 2) {
-              curIndex++;
+        if(curIndex < 2){
+          curIndex ++
+          camera.layers.enable( curIndex + 1 );
+        }
+        TweenMax.to(
+          camera.position,
+          0.35,
+          {
+            x: x,
+            ease:Power0.easeNone,
+            onComplete: function(){
+              // self.enter_ani = false;
+              // self.object.rotation.y = 0;
+              // this.playani = false;
+              clickAni = false
             }
-          },
-        });
-      };
-      btnLeft.addEventListener('click', cameraToleft);
-      btnRight.addEventListener('click', cameraToright);
+          }
+        );
+      }
+      btnLeft.addEventListener('click', cameraToleft)
+      btnRight.addEventListener('click', cameraToright)
       btnStart.addEventListener('click', () => {
         const startBg = document.querySelector('#startBg');
         startBg.setAttribute('style', 'display:none');
@@ -166,8 +173,9 @@ export default {
           1,
           1000
         );
-        camera.position.set(0, 0, 8);
-        scene = new THREE.Scene();
+        camera.position.set( -3.5, 0, 8 );
+        scene = new THREE.Scene()
+        camera.layers.enable( 1 );
 
         //添加灯光
         initLight();
@@ -176,7 +184,7 @@ export default {
           alpha: true,
           antialias: true,
         });
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(2);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.gammaOutput = true;
         renderer.gammaFactor = 2.2;
@@ -208,18 +216,20 @@ export default {
           z: 0,
           scale: 1.2,
         });
-        loadBasisTex(initModel, 2, {
-          x: -0.3,
-          y: -0.8,
-          z: 0,
-          scale: 1.5,
-        });
-        loadBasisTex(initModel, 3, {
-          x: 3.2,
-          y: -0.8,
-          z: 0,
-          scale: 1.5,
-        });
+        setTimeout(() => {
+          loadBasisTex(initModel, 2, {
+            x: -0.3,
+            y: -0.8,
+            z: 0,
+            scale: 1.5
+          })
+          loadBasisTex(initModel, 3, {
+            x: 3.2,
+            y: -0.8,
+            z: 0,
+            scale: 1.5
+          })
+        }, 100)
 
         //添加旋转控制器
         // controls = new OrbitControls( camera, renderer.domElement )
@@ -274,6 +284,7 @@ export default {
                 envMapIntensity: 1,
                 transparent: true,
               });
+              child.layers.set(num)
 
               children.push(child);
             }
@@ -349,8 +360,6 @@ export default {
 
       //响应式
       const onWindowResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.render(scene, camera);
       };

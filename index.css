@@ -162,3 +162,33 @@ body {
   top: 40%;
   left: 42px;
 }
+.tag1 {
+  background-image: url('./assets/images/type1.png');
+  width: 34.667vw;
+  height: 6.667vw;
+  background-size: 100% 100%;
+  position: absolute;
+  left: 13vw;
+  top: 50%;
+  transform: translateY(-16vw);
+}
+.tag2 {
+  background-image: url('./assets/images/type2.png');
+  width: 34.667vw;
+  height: 6.667vw;
+  background-size: 100% 100%;
+  position: absolute;
+  left: 13vw;
+  top: 50%;
+  transform: translateY(-16vw);
+}
+.tag3 {
+  background-image: url('./assets/images/type3.png');
+  width: 34.667vw;
+  height: 6.667vw;
+  background-size: 100% 100%;
+  position: absolute;
+  left: 13vw;
+  top: 50%;
+  transform: translateY(-16vw);
+}

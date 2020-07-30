@@ -5,6 +5,7 @@
 		</div>
 		<div class="main">
 			<div class="main-bg"></div>
+      <div id="tag"></div>
 			<div class="btn-left" id="btnLeft"></div>
 			<div class="btn-right" id="btnRight"></div>
 			<div class="swipe" id="swipe"></div>
@@ -39,6 +40,7 @@ export default {
       const btnRight = document.querySelector('#btnRight');
       const btnStart = document.querySelector('#btnStart');
       const btnConfirm = document.querySelector('#btnConfirm');
+      const tag = document.querySelector('#tag')
       const swipe = document.querySelector('#swipe');
       const cameraToleft = () => {
         if(clickAni) {
@@ -63,6 +65,7 @@ export default {
         if(curIndex > 0){
           curIndex --
         }
+        tag.className = 'tag' + (curIndex + 1)
         camera.layers.enable( curIndex + 1 );
         TweenMax.to(
           camera.position,
@@ -104,6 +107,7 @@ export default {
           curIndex ++
           camera.layers.enable( curIndex + 1 );
         }
+        tag.className = 'tag' + (curIndex + 1)
         TweenMax.to(
           camera.position,
           0.35,

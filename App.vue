@@ -256,7 +256,7 @@ export default {
       };
 
       //加载模型
-      const initModel = (map, metalMap, normalMap, roughMap, num, size) => {
+      const initModel = (map, metalMap, normalMap, num, size) => {
         const gltfLoader = new GLTFLoader();
         const dracoLoader = new DRACOLoader();
         // 设置解码器路径
@@ -277,9 +277,9 @@ export default {
               child.material = new THREE.MeshStandardMaterial({
                 map: map,
                 metalnessMap: metalMap,
-                roughnessMap: roughMap,
+                // roughnessMap: roughMap,
                 normalMap: normalMap,
-                roughness: 1,
+                roughness: 0.5,
                 metalness: 1,
                 envMap: textureCube,
                 envMapIntensity: 1,
@@ -341,21 +341,21 @@ export default {
               reject
             )
           ),
-          new Promise((resolve, reject) =>
-            basisLoader.load(
-              `./assets/models/tance/basis/Roughness_${num}.basis`,
-              resolve,
-              undefined,
-              reject
-            )
-          ),
-        ]).then(([map, metalMap, normalMap, roughMap]) => {
+          // new Promise((resolve, reject) =>
+          //   basisLoader.load(
+          //     `./assets/models/tance/basis/Roughness_${num}.basis`,
+          //     resolve,
+          //     undefined,
+          //     reject
+          //   )
+          // ),
+        ]).then(([map, metalMap, normalMap]) => {
           map.encoding = THREE.sRGBEncoding;
           map.flipY = false;
           metalMap.flipY = false;
           normalMap.flipY = false;
-          roughMap.flipY = false;
-          callback(map, metalMap, normalMap, roughMap, num, size);
+          // roughMap.flipY = false;
+          callback(map, metalMap, normalMap, num, size);
         });
       };
 

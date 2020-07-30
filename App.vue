@@ -217,20 +217,20 @@ export default {
           z: 0,
           scale: 1.2,
         });
-        // setTimeout(() => {
-        //   loadBasisTex(initModel, 2, {
-        //     x: -0.3,
-        //     y: -0.8,
-        //     z: 0,
-        //     scale: 1.5
-        //   })
-        //   loadBasisTex(initModel, 3, {
-        //     x: 3.2,
-        //     y: -0.8,
-        //     z: 0,
-        //     scale: 1.5
-        //   })
-        // }, 100)
+        setTimeout(() => {
+          loadBasisTex(initModel, 2, {
+            x: -0.3,
+            y: -0.8,
+            z: 0,
+            scale: 1.5
+          })
+          loadBasisTex(initModel, 3, {
+            x: 3.2,
+            y: -0.8,
+            z: 0,
+            scale: 1.5
+          })
+        }, 100)
 
         //添加旋转控制器
         // controls = new OrbitControls( camera, renderer.domElement )
@@ -256,7 +256,7 @@ export default {
       };
 
       //加载模型
-      const initModel = (map, metalMap, normalMap, num, size) => {
+      const initModel = (map, metalMap, normalMap, roughMap, num, size) => {
         const gltfLoader = new GLTFLoader();
         const dracoLoader = new DRACOLoader();
         // 设置解码器路径
@@ -277,7 +277,7 @@ export default {
               child.material = new THREE.MeshStandardMaterial({
                 map: map,
                 metalnessMap: metalMap,
-                // roughnessMap: roughMap,
+                roughnessMap: roughMap,
                 normalMap: normalMap,
                 roughness: 0.5,
                 metalness: 1,
@@ -341,21 +341,21 @@ export default {
               reject
             )
           ),
-          // new Promise((resolve, reject) =>
-          //   basisLoader.load(
-          //     `./assets/models/tance/basis/Roughness_${num}.basis`,
-          //     resolve,
-          //     undefined,
-          //     reject
-          //   )
-          // ),
-        ]).then(([map, metalMap, normalMap]) => {
+          new Promise((resolve, reject) =>
+            basisLoader.load(
+              `./assets/models/tance/basis/Roughness_${num}.basis`,
+              resolve,
+              undefined,
+              reject
+            )
+          ),
+        ]).then(([map, metalMap, normalMap, roughMap]) => {
           map.encoding = THREE.sRGBEncoding;
           map.flipY = false;
           metalMap.flipY = false;
           normalMap.flipY = false;
-          // roughMap.flipY = false;
-          callback(map, metalMap, normalMap, num, size);
+          roughMap.flipY = false;
+          callback(map, metalMap, normalMap, roughMap, num, size);
         });
       };
 

@@ -5,7 +5,7 @@
 		</div>
 		<div class="main">
 			<div class="main-bg"></div>
-      <div id="tag"></div>
+      <div id="tag" class="tag1"></div>
 			<div class="btn-left" id="btnLeft"></div>
 			<div class="btn-right" id="btnRight"></div>
 			<div class="swipe" id="swipe"></div>
@@ -32,6 +32,8 @@ export default {
       let camera, scene, renderer, controls, textureCube;
       let wrapper = [];
       let wrapperX = [-3.5, -0, 3.5];
+      let rotateControl = [false, false, false]
+		  let tweenControl = []
       let rotate = 0;
       let curIndex = 0;
       let clickAni = false;
@@ -135,6 +137,7 @@ export default {
 
       btnConfirm.addEventListener('click', () => {
         btnConfirm.setAttribute('style', 'display:none');
+        rotateControl[curIndex] = false
         TweenMax.to(wrapper[curIndex].rotation, 0.5, {
           x: -0.4,
           z: -2.1,
@@ -164,10 +167,13 @@ export default {
         this.moveEndY = e.changedTouches[0].pageY;
         let X = this.moveEndX - this.startX;
         let Y = this.moveEndY - this.startY;
-        if (X > 100) {
+        if (X > 100 && Math.abs(Y) < 20) {
           btnLeft.click()
-        } else if (X < -100) {
+        } else if (X < -100 && Math.abs(Y) < 20) {
           btnRight.click()
+        } else if ( Math.abs(Y) < 30){
+          tweenControl[curIndex].kill()
+          rotateControl[curIndex] = true
         }
       });
       const init = () => {
@@ -216,7 +222,7 @@ export default {
 
         //加载贴图和添加模型
         loadBasisTex(initModel, 1, {
-          x: -3.8,
+          x: -3.6,
           y: -0.8,
           z: 0,
           scale: 1.2,
@@ -229,7 +235,7 @@ export default {
             scale: 1.5
           })
           loadBasisTex(initModel, 3, {
-            x: 3.2,
+            x: 3.4,
             y: -0.8,
             z: 0,
             scale: 1.5
@@ -301,7 +307,7 @@ export default {
           wrapper[index].rotation.x = 0.9;
           wrapper[index].rotation.z = -0.2;
           wrapper[index].scale.set(size.scale, size.scale, size.scale);
-          new TweenMax(wrapper[index].rotation, 2, {
+          tweenControl[index] = new TweenMax(wrapper[index].rotation, 2, {
             z: 0,
             x: 1.1,
             y: 0.2,
@@ -370,6 +376,11 @@ export default {
       };
 
       const animate = () => {
+        for(let i = 0; i < 3; i ++){
+          if(rotateControl[i]){
+            wrapper[i].rotation.y = (this.startY - this.moveEndY) / 10
+          }
+        }
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
       };

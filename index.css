@@ -155,12 +155,12 @@ body {
   z-index: 10;
 }
 .swipe {
-  width: 80%;
   /* margin: auto; */
-  height: 200px;
+  height: 300px;
   position: absolute;
-  top: 40%;
-  left: 42px;
+  top: 35%;
+  left: 3vw;
+  right: 3vw;
 }
 .tag1 {
   background-image: url('./assets/images/type1.png');

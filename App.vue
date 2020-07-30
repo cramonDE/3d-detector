@@ -1,21 +1,24 @@
 <template>
-  <div>
-    <div class="start-bg" id="startBg">
-			<button class="start" id="btnStart"></button>
-		</div>
-		<div class="main">
-			<div class="main-bg"></div>
-      <div id="tag" class="tag1"></div>
-			<div class="btn-left" id="btnLeft"></div>
-			<div class="btn-right" id="btnRight"></div>
-			<div class="swipe" id="swipe"></div>
-			<button class="confirm" id="btnConfirm" style="visibility: hidden;"></button>
-		</div>
+  <div class="container">
+    <template v-if="!isStarted">
+      <div class="start-bg" id="startBg">
+        <button class="start" id="btnStart"></button>
+      </div>
+      <div class="main">
+        <div class="main-bg"></div>
+        <div id="tag" class="tag1"></div>
+        <div class="btn-left" id="btnLeft"></div>
+        <div class="btn-right" id="btnRight"></div>
+        <div class="swipe" id="swipe"></div>
+        <button class="confirm" id="btnConfirm" style="visibility: hidden;"></button>
+      </div>
+    </template>
+    <Game v-else />    
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import Game from './components/Game.vue';
 import * as THREE from './build/three.module.js';
 import { OrbitControls } from './utils/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './utils/jsm/loaders/GLTFLoader.js';
@@ -25,7 +28,12 @@ import { BasisTextureLoader } from './utils/jsm/loaders/BasisTextureLoader.js';
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    Game,
+  },
+  data() {
+    return {
+      isStarted: false
+    }
   },
   methods: {
     app() {
@@ -150,9 +158,12 @@ export default {
           z: 5,
           y: -1,
           ease: Power0.easeOut,
-          onComplete: function () {
+          onComplete: () => {
             clickAni = true;
             // 跳转链接 to do 传参 curIndex
+            setTimeout(() => {
+              this.isStarted = true;
+            }, 1000)
           },
         });
       });

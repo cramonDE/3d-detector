@@ -196,12 +196,12 @@ export default {
 
         var r = './assets/texture/env5/';
         var urls = [
-          r + 'px.png',
-          r + 'nx.png',
-          r + 'py.png',
-          r + 'ny.png',
-          r + 'pz.png',
-          r + 'nz.png',
+          r + 'px.jpg',
+          r + 'nx.jpg',
+          r + 'py.jpg',
+          r + 'ny.jpg',
+          r + 'pz.jpg',
+          r + 'nz.jpg',
         ];
 
         textureCube = new THREE.CubeTextureLoader().load(urls);

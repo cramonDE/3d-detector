@@ -1,0 +1,131 @@
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+a,
+address,
+em,
+img,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+i,
+b,
+s {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+a img {
+  border: none;
+  vertical-align: top;
+}
+a {
+  text-decoration: none;
+}
+
+button {
+  overflow: visible;
+  padding: 0;
+  margin: 0;
+  border: 0 none;
+  background-color: transparent;
+}
+button::-moz-focus-inner {
+  padding: 0;
+}
+
+textarea,
+input {
+  background: none;
+  padding: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+input[type='password'] {
+  -webkit-text-security: disc;
+}
+textarea:focus,
+input:focus,
+button:focus {
+  outline: none;
+}
+body {
+  word-wrap: break-word;
+}
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.end-main {
+    width: 100vw;
+    height: 100vh;
+    background-image: url('./assets/images/end/bg.png');
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    position: relative;
+}
+.end-logo {
+    position: absolute;
+    z-index: 2;
+    right: 15px;
+    top: 14px;
+    background-image: url('./assets/images/end/end-logo.png');
+    background-size: 100% 100%;
+    width: 108px;
+    height: 25px;
+}
+.end-figure {
+    margin: 0 auto;
+    background-image: url('./assets//images/end/figure.png');
+    width: 352px;
+    height: 188px;
+    background-size: 100% 100%;
+}
+.end-mid {
+}
+.end-tit {
+    font-size: 23px;
+    color: #fff;
+    font-weight: bold;
+}
+.end-list {
+    width: 100vw;
+}
+.end-item {
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+}

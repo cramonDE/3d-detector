@@ -243,7 +243,7 @@ export default {
             x: -0.3,
             y: -0.8,
             z: 0,
-            scale: 1.5
+            scale: 0.6
           })
           loadBasisTex(initModel, 3, {
             x: 3.4,
@@ -389,7 +389,10 @@ export default {
       const animate = () => {
         for(let i = 0; i < 3; i ++){
           if(rotateControl[i]){
-            wrapper[i].rotation.y = (this.startY - this.moveEndY) / 10
+            let rotation = (startY - moveEndY) / 15
+            if(Math.abs(rotation) < 1 && !clickAni) {
+              wrapper[i].rotation.y = (startY - moveEndY) / 15
+            }
           }
         }
         renderer.render(scene, camera);

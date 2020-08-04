@@ -1,17 +1,36 @@
 <template>
-  <div class="game-wrap">
-    <div id="game"></div>
-    <div id="loader" ontouchmove="return !1" class="loader">
-      <div class="loader-graph"></div>
-      <div id="progress" class="loader-progress">0%</div>
-      <div class="loader-text">LOADING...</div>
+  <div>
+    <div class="game-wrap" v-if="!isEnd">
+      <div id="game"></div>
+      <div id="loader" ontouchmove="return !1" class="loader">
+        <div class="loader-graph"></div>
+        <div id="progress" class="loader-progress">0%</div>
+        <div class="loader-text">LOADING...</div>
+      </div>
     </div>
+    <End v-else />
   </div>
 </template>
 
 <script>
+import End from './End.vue';
+
 export default {
   name: 'Game',
+
+  components: {
+    End,
+  },
+
+  data(){
+    return {
+      isEnd: false
+    }
+  },
+
+  props: [
+    'scanner' 
+  ],
 
   mounted() {
     window.QGame = new Phaser.Game(750, 750 / window.innerWidth * window.innerHeight, Phaser.CANVAS, 'game', {
@@ -21,6 +40,11 @@ export default {
       update: this.update,
       render: this.render
     });
+
+    // 测试随便设定 10s游戏结束
+    setTimeout(() => {
+      this.isEnd = true
+    }, 10000)
   },
 
   methods: {
@@ -36,7 +60,7 @@ export default {
       QGame.load.image('land2', '../assets/images/game/land_02.jpg');
       QGame.load.image('land3', '../assets/images/game/land_03.jpg');
       QGame.load.image('land4', '../assets/images/game/land_04.jpg');
-      QGame.load.image('scanner', '../assets/images/game/scanner.png');
+      QGame.load.image('scanner', `../assets/images/game/scanner${this.scanner}.png`);
       QGame.load.image('toolbar', '../assets/images/game/toolbar.png');
       QGame.load.image('alert', '../assets/images/game/alert.png');
       QGame.load.image('transparent', '../assets/images/game/transparent.png');

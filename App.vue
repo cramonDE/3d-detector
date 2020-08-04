@@ -13,7 +13,7 @@
         <button class="confirm" id="btnConfirm" style="visibility: hidden;"></button>
       </div>
     </template>
-    <Game v-else />    
+    <Game :scanner='curIndex' v-else />    
   </div>
 </template>
 
@@ -32,7 +32,8 @@ export default {
   },
   data() {
     return {
-      isStarted: false
+      isStarted: false,
+      curIndex: 0
     }
   },
   methods: {
@@ -43,7 +44,6 @@ export default {
       let rotateControl = [false, false, false]
 		  let tweenControl = []
       let rotate = 0;
-      let curIndex = 0;
       let clickAni = false;
       let startX, startY, moveEndX, moveEndY;
       const btnLeft = document.querySelector('#btnLeft');
@@ -59,7 +59,7 @@ export default {
         clickAni = true
         let x = 0
         renderer.render( scene, camera)
-        switch(curIndex) {
+        switch(this.curIndex) {
           case 0:
             x = -3.5
             break
@@ -72,11 +72,11 @@ export default {
           default: 
             break
         }
-        if(curIndex > 0){
-          curIndex --
+        if(this.curIndex > 0){
+          this.curIndex --
         }
-        tag.className = 'tag' + (curIndex + 1)
-        camera.layers.enable( curIndex + 1 );
+        tag.className = 'tag' + (this.curIndex + 1)
+        camera.layers.enable( this.curIndex + 1 );
         TweenMax.to(
           camera.position,
           0.35,
@@ -85,9 +85,6 @@ export default {
             ease:Power0.easeNone,
             onComplete: function(){
               clickAni = false
-              // self.enter_ani = false;
-              // self.object.rotation.y = 0;
-              // this.playani = false;
             }
           }
         );
@@ -100,7 +97,7 @@ export default {
         renderer.render( scene, camera)
         clickAni = true
         let x = 0
-        switch(curIndex) {
+        switch(this.curIndex) {
           case 0:
             x = 0
             break
@@ -113,11 +110,11 @@ export default {
           default: 
             break
         }
-        if(curIndex < 2){
-          curIndex ++
-          camera.layers.enable( curIndex + 1 );
+        if(this.curIndex < 2){
+          this.curIndex ++
+          camera.layers.enable( this.curIndex + 1 );
         }
-        tag.className = 'tag' + (curIndex + 1)
+        tag.className = 'tag' + (this.curIndex + 1)
         TweenMax.to(
           camera.position,
           0.35,
@@ -125,9 +122,6 @@ export default {
             x: x,
             ease:Power0.easeNone,
             onComplete: function(){
-              // self.enter_ani = false;
-              // self.object.rotation.y = 0;
-              // this.playani = false;
               clickAni = false
             }
           }
@@ -145,16 +139,16 @@ export default {
 
       btnConfirm.addEventListener('click', () => {
         btnConfirm.setAttribute('style', 'display:none');
-        rotateControl[curIndex] = false
-        TweenMax.to(wrapper[curIndex].rotation, 0.5, {
+        rotateControl[this.curIndex] = false
+        TweenMax.to(wrapper[this.curIndex].rotation, 0.5, {
           x: -0.4,
           z: -2.1,
           y: -1.55,
           ease: Power0.easeOut,
           onComplete: function () {},
         });
-        TweenMax.to(wrapper[curIndex].position, 0.5, {
-          x: wrapperX[curIndex],
+        TweenMax.to(wrapper[this.curIndex].position, 0.5, {
+          x: wrapperX[this.curIndex],
           z: 5,
           y: -1,
           ease: Power0.easeOut,
@@ -183,8 +177,8 @@ export default {
         } else if (X < -100 && Math.abs(Y) < 20) {
           btnRight.click()
         } else if ( Math.abs(Y) < 30){
-          tweenControl[curIndex].kill()
-          rotateControl[curIndex] = true
+          tweenControl[this.curIndex].kill()
+          rotateControl[this.curIndex] = true
         }
       });
       const init = () => {
@@ -277,7 +271,7 @@ export default {
       };
 
       //加载模型
-      const initModel = (map, metalMap, normalMap, num, size) => {
+      const initModel = (map, metalMap, num, size) => {
         const gltfLoader = new GLTFLoader();
         const dracoLoader = new DRACOLoader();
         // 设置解码器路径
@@ -299,7 +293,7 @@ export default {
                 map: map,
                 metalnessMap: metalMap,
                 // roughnessMap: roughMap,
-                normalMap: normalMap,
+                // normalMap: normalMap,
                 roughness: 0.5,
                 metalness: 1,
                 envMap: textureCube,
@@ -354,14 +348,14 @@ export default {
               reject
             )
           ),
-          new Promise((resolve, reject) =>
-            basisLoader.load(
-              `./assets/models/tance/basis/normal_${num}.basis`,
-              resolve,
-              undefined,
-              reject
-            )
-          ),
+          // new Promise((resolve, reject) =>
+          //   basisLoader.load(
+          //     `./assets/models/tance/basis/normal_${num}.basis`,
+          //     resolve,
+          //     undefined,
+          //     reject
+          //   )
+          // ),
           // new Promise((resolve, reject) =>
           //   basisLoader.load(
           //     `./assets/models/tance/basis/Roughness_${num}.basis`,
@@ -370,13 +364,13 @@ export default {
           //     reject
           //   )
           // ),
-        ]).then(([map, metalMap, normalMap]) => {
+        ]).then(([map, metalMap]) => {
           map.encoding = THREE.sRGBEncoding;
           map.flipY = false;
           metalMap.flipY = false;
-          normalMap.flipY = false;
+          // normalMap.flipY = false;
           // roughMap.flipY = false;
-          callback(map, metalMap, normalMap, num, size);
+          callback(map, metalMap, num, size);
         });
       };
 

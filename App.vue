@@ -298,7 +298,7 @@ export default {
                 metalness: 1,
                 envMap: textureCube,
                 envMapIntensity: 1,
-                transparent: true,
+                // transparent: true,
               });
               child.layers.set(num)
 

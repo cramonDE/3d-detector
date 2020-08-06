@@ -245,7 +245,7 @@ export default {
             z: 0,
             scale: 1.5
           })
-        }, 100)
+        }, 300)
 
         //添加旋转控制器
         // controls = new OrbitControls( camera, renderer.domElement )
@@ -383,9 +383,9 @@ export default {
       const animate = () => {
         for(let i = 0; i < 3; i ++){
           if(rotateControl[i]){
-            let rotation = (startY - moveEndY) / 15
+            let rotation = (this.startY - this.moveEndY) / 15
             if(Math.abs(rotation) < 1 && !clickAni) {
-              wrapper[i].rotation.y = (startY - moveEndY) / 15
+              wrapper[i].rotation.y = (this.startY - this.moveEndY) / 15
             }
           }
         }

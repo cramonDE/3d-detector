@@ -24,6 +24,7 @@ import { OrbitControls } from './utils/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './utils/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from './utils/jsm/loaders/DRACOLoader.js';
 import { BasisTextureLoader } from './utils/jsm/loaders/BasisTextureLoader.js';
+import EndVue from './components/End.vue';
 
 export default {
   name: 'App',
@@ -274,6 +275,7 @@ export default {
       const initModel = (map, metalMap, num, size) => {
         const gltfLoader = new GLTFLoader();
         const dracoLoader = new DRACOLoader();
+        const that = this
         // 设置解码器路径
         dracoLoader.setDecoderPath('./utils/libs/draco/gltf/');
         gltfLoader.setDRACOLoader(dracoLoader);
@@ -286,8 +288,6 @@ export default {
           let children = [];
           gltf.scene.traverse(function (child) {
             if (child.isMesh) {
-              console.log(child);
-
               child.position.set(0, 0, 0);
               child.material = new THREE.MeshStandardMaterial({
                 map: map,
@@ -319,11 +319,12 @@ export default {
             repeat: -1,
             yoyo: true,
           });
-          scene.add(wrapper[index]);
-
-          renderer.render(scene, camera);
-
-          animate();
+          that.$nextTick(() => {
+            scene.add(wrapper[index]);
+            renderer.render(scene, camera);
+            animate();
+          })
+          
         });
       };
 

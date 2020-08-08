@@ -90,6 +90,7 @@ body {
 html,
 body {
   height: 100%;
+  width: 100%;
   overflow: hidden;
 }
 body {
@@ -191,4 +192,25 @@ body {
   left: 13vw;
   top: 50%;
   transform: translateY(-16vw);
+}
+.pics {
+  display: inline-flex;
+  white-space: nowrap;
+  transition: transform 0.35s ease-out;
+}
+.pic {
+  width: 100vw;
+  height: 163.14vw;
+  background-size: 36%;
+  background-position: 50% 66%;
+  background-repeat: no-repeat;
+}
+.pic1 {
+  background-image: url('./assets/images/s1.png');
+}
+.pic2 {
+  background-image: url('./assets/images/s2.png');
+}
+.pic3 {
+  background-image: url('./assets/images/s3.png');
 }

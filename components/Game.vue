@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="game-wrap" v-if="!isEnd">
+    <div class="game-wrap">
       <div id="game"></div>
       <div id="loader" ontouchmove="return !1" class="loader">
         <div class="loader-graph"></div>
@@ -8,7 +8,7 @@
         <div class="loader-text">LOADING...</div>
       </div>
     </div>
-    <End v-else />
+    <End v-show="isEnd" :data="result" @onReplay="hanlderReplay" />
   </div>
 </template>
 
@@ -24,7 +24,11 @@ export default {
 
   data(){
     return {
-      isEnd: false
+      isEnd: false,
+      result: {
+        count: 0,
+        time: 60,
+      },
     }
   },
 
@@ -42,9 +46,9 @@ export default {
     });
 
     // 测试随便设定 10s游戏结束
-    setTimeout(() => {
-      this.isEnd = true
-    }, 10000)
+    // setTimeout(() => {
+    //   this.gameover();
+    // }, 4000)
   },
 
   methods: {
@@ -64,7 +68,10 @@ export default {
       QGame.load.image('toolbar', '../assets/images/game/toolbar.png');
       QGame.load.image('alert', '../assets/images/game/alert.png');
       QGame.load.image('transparent', '../assets/images/game/transparent.png');
+      QGame.load.image('diamond', '../assets/images/game/diamond.png');
       QGame.load.atlas('arcade', '../assets/images/game/arcade-joystick.png', '../utils/arcade-joystick.json');
+      QGame.load.audio('bgmusic', '../assets/audio/bgmusic.mp3');
+      QGame.load.audio('hit', '../assets/audio/hit.wav');
 
       QGame.load.start();
     },
@@ -76,10 +83,10 @@ export default {
     loadComplete() {  
       const $loader = document.getElementById('loader');
       setTimeout(() => {
-          $loader.classList.add('scaleOut');
+        $loader.classList.add('scaleOut');
       }, 200);
       setTimeout(() => {
-          $loader.remove();
+        $loader.remove();
       }, 1000);
     },
 
@@ -88,6 +95,7 @@ export default {
       QGame.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
       QGame.world.setBounds(0, 0, 6420, 6642);
+      QGame.winW = QGame.camera.width;
       QGame.winH = QGame.camera.height;
       QGame.centerX = QGame.world.centerX;
       QGame.centerY = QGame.world.centerY;
@@ -97,6 +105,9 @@ export default {
     },
 
     create() {
+      QGame.music = QGame.add.audio('bgmusic', 1, true);
+      QGame.hitAudio = QGame.add.audio('hit', 1, false);
+      QGame.music.play();
       QGame.bg = QGame.add.group();
       QGame.bg.create(0, 0, 'land1');
       QGame.bg.create(0, 830, 'land2');
@@ -104,9 +115,12 @@ export default {
       QGame.bg.create(0, 2491, 'land4');
       QGame.bg.scale.set(2);
 
+      QGame.diamonGroup = QGame.add.group();
+      this.initDiamond();
+
       QGame.scannerWrap = QGame.add.tileSprite(QGame.centerX, QGame.centerY, 286, QGame.winH, 'transparent');
       QGame.scannerWrap.anchor.set(0.5);
-      QGame.scanner = QGame.add.sprite(0, QGame.winH / 2, 'scanner');
+      QGame.scanner = QGame.add.sprite(0, QGame.winH / 2 - 250, 'scanner');
       QGame.scanner.anchor.set(0.5, 1);
       QGame.scannerWrap.addChild(QGame.scanner);
 
@@ -118,28 +132,54 @@ export default {
 
       QGame.cursors = QGame.input.keyboard.createCursorKeys();
       QGame.controlGroup = QGame.add.group();
-      QGame.controlGroup.fixedToCamera = true;
+      
       QGame.toolbar = QGame.controlGroup.create(0, QGame.winH, 'toolbar');
       QGame.toolbar.anchor.set(0, 1);
-
-      QGame.alert = QGame.controlGroup.create(QGame.centerX, QGame.winH - 71, 'alert');
+      QGame.alert = QGame.controlGroup.create(QGame.winW / 2, QGame.winH - 71, 'alert');
       QGame.alert.anchor.set(0.5);
+      QGame.alert.alpha = 0;
 
       QGame.pad = QGame.plugins.add(Phaser.VirtualJoystick);
       QGame.stick = QGame.pad.addStick(0, 0, 200, 'arcade');
       QGame.stick.alignBottomLeft();
-
       QGame.buttonA = QGame.pad.addButton(620, QGame.winH - 120, 'arcade', 'button1-up', 'button1-down');
       QGame.buttonA.onDown.add(this.pressDownButtonA, this);
       QGame.buttonA.onUp.add(this.pressUpButtonA, this);
+
+      QGame.targetCount = QGame.diamonGroup.children.length;
+      QGame.bingoCount = 0;
+      QGame.totalTime = 60;
+      QGame.leftTime = 60;
+      QGame.countdown = QGame.add.text(QGame.winW / 2, QGame.leftTime, '30s', { font: "64px Arial", fill: "#ffffff", align: "center" });
+      QGame.countdown.anchor.setTo(0.5, 0.5);
+      QGame.countdown.fixedToCamera = true;
+      QGame.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);
     },
 
     update() {
+      QGame.controlGroup.fixedToCamera = true;
       const maxSpeed = 400;
       if (QGame.stick.isDown) {
         QGame.physics.arcade.velocityFromRotation(QGame.stick.rotation, QGame.stick.force * maxSpeed, QGame.scannerWrap.body.velocity);
       } else {
         QGame.scannerWrap.body.velocity.set(0);
+      }
+
+      for (let i = 0; i< QGame.diamonGroup.children.length; i++) {
+        const diamond = QGame.diamonGroup.children[i];
+        const deltaX = Math.abs(diamond.x - QGame.scanner.body.x);
+        const deltaY = Math.abs(diamond.y - QGame.scanner.body.y);
+        const distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        if (distance <= 100) {
+          QGame.hitAudio.play();
+          QGame.diamonGroup.children[i].destroy();
+          QGame.bingoCount++;
+          QGame.alert.alpha = QGame.bingoCount / QGame.targetCount;
+
+          if (QGame.bingoCount === QGame.targetCount) {
+            this.gameover();
+          }
+        }
       }
     },
 
@@ -147,7 +187,32 @@ export default {
       // QGame.debug.spriteBounds(QGame.scannerWrap);
     },
 
-    pressDownButtonA () {
+    initDiamond() {
+      for (let i = 0; i< 30; i++) {
+        // x:500-6000, y:500-5600
+        QGame.diamonGroup.create(500 + parseInt(Math.random() * 5500), 500 + parseInt(Math.random() * 5100), 'diamond');
+      }
+    },
+
+    updateTime() {
+      if (QGame.leftTime > 0) {
+        QGame.leftTime--;
+        QGame.countdown.setText(`${QGame.leftTime}s`);
+      } else {
+        this.gameover();
+      }
+    },
+
+    gameover() {
+      this.isEnd = true;
+      QGame.paused = true;
+      this.result = {
+        count: QGame.bingoCount,
+        time: QGame.totalTime - QGame.leftTime,
+      };
+    },
+
+    pressDownButtonA() {
       QGame.scannerTn = QGame.add.tween(QGame.scanner).to({
         rotation: [Math.PI / 6, 0, -Math.PI / 6, 0]
       }, 2000, "Linear", true, 0, -1);
@@ -164,6 +229,16 @@ export default {
         QGame.scannerStopTn.stop();
         QGame.scannerStopTn = null;
       }, this);
+    },
+
+    hanlderReplay() {
+      this.isEnd = false;
+      QGame.bingoCount = 0;
+      QGame.leftTime = QGame.totalTime;
+      QGame.diamonGroup.children = [];
+      this.initDiamond();
+      QGame.paused = false;
+      QGame.music.restart();
     },
   }
 }

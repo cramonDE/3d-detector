@@ -194,7 +194,7 @@ body {
   transform: translateY(-16vw);
 }
 .pics {
-  margin-top: 39vh;
+  margin-top: 38vh;
   display: inline-flex;
   white-space: nowrap;
   transition: transform 0.35s ease-out;
@@ -207,9 +207,12 @@ body {
   background-repeat: no-repeat;
 }
 .pic1 {
+  background-size: 33%;
+  background-position: 50% 80%;
   background-image: url('./assets/images/s1.png');
 }
 .pic2 {
+  background-size: 31%;
   background-image: url('./assets/images/s2.png');
 }
 .pic3 {

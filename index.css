@@ -194,13 +194,14 @@ body {
   transform: translateY(-16vw);
 }
 .pics {
+  margin-top: 39vh;
   display: inline-flex;
   white-space: nowrap;
   transition: transform 0.35s ease-out;
 }
 .pic {
   width: 100vw;
-  height: 163.14vw;
+  height: 60vw;
   background-size: 36%;
   background-position: 50% 66%;
   background-repeat: no-repeat;

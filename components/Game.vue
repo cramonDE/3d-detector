@@ -27,7 +27,7 @@ export default {
       isEnd: false,
       result: {
         count: 0,
-        time: 60,
+        time: 30,
       },
     }
   },
@@ -150,7 +150,7 @@ export default {
       QGame.bingoCount = 0;
       QGame.totalTime = 60;
       QGame.leftTime = 60;
-      QGame.countdown = QGame.add.text(QGame.winW / 2, QGame.leftTime, '30s', { font: "64px Arial", fill: "#ffffff", align: "center" });
+      QGame.countdown = QGame.add.text(QGame.winW / 2, 60, '60s', { font: "64px Arial", fill: "#ffffff", align: "center" });
       QGame.countdown.anchor.setTo(0.5, 0.5);
       QGame.countdown.fixedToCamera = true;
       QGame.time.events.loop(Phaser.Timer.SECOND, this.updateTime, this);

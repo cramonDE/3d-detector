@@ -8,14 +8,14 @@
         <div class="end-list">
           <div class="end-item">
             <div class="end-item-l">
-              <p class="end-item-tit">收集矿石?/30</p>
+              <p class="end-item-tit">收集矿石</p>
               <p class="end-item-txt">Count</p>
             </div>
             <div class="end-item-r">{{data.count}}</div>
           </div>
           <div class="end-item">
             <div class="end-item-l">
-              <p class="end-item-tit">使用时间?/60</p>
+              <p class="end-item-tit">使用时间</p>
               <p class="end-item-txt">Time</p>
             </div>
             <div class="end-item-r">{{data.time}}</div>
